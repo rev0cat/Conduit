@@ -1,0 +1,16 @@
+# Frontend
+FROM alpine
+RUN mkdir /root/client
+WORKDIR /root/client
+RUN mkdir /root/client/react-redux-realworld-example-app
+COPY react-redux-realworld-example-app /root/client/react-redux-realworld-example-app
+ENV REACT_APP_BACKEND_URL="http://localhost:8080/api"
+RUN cd /root/client/react-redux-realworld-example-app
+RUN npm install
+RUN npm run build
+
+FROM nginx
+COPY nginx.conf /etc/nginx/
+RUN cd /root/client/react-redux-realworld-example-app
+RUN cp /root/client/react-redux-realworld-example-app/build?* /var/www/html
+RUN nginx -s reload

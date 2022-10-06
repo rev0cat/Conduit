@@ -1,0 +1,30 @@
+version: '3.0'
+services:
+
+  #启动MySQL镜像                         
+  mysql:
+    image: mysql
+    ports:
+      #端口映射，外部端口映射容器内部端口，数组格式可映射多个端口
+      - 3306:3306
+    environment:
+      #设置镜像变量
+      - MYSQL_ROOT_PASSWORD=123456
+
+  #运行dockerfile文件制作的镜像    
+  realserver:
+    image: realserver
+    build:
+      context: /root/realserver #表示dockerfile文件存在的目录
+      dockerfile: dockerfile #表示dockerfile的文件名
+    ports:
+      #端口映射
+      - 80:80
+
+  realclient:
+    image: realclient
+    build:
+      context: /root/realclient
+      dockerfile: dockerfile
+    ports:
+      - 8080:8080
